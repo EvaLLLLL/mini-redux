@@ -1,35 +1,37 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 const Context = createContext(null)
 
+let reducer = undefined
+let state = undefined
+let listeners = []
+const setState = newState => {
+  state = newState
+  listeners.map(fn => fn(state))
+}
+
 export const store = {
-  state: { val: '' },
-  listeners: [],
-  setState: newState => {
-    store.state = newState
-    store.listeners.map(fn => fn(store.state))
-  },
+  getState: () => state,
   dispatch: action => {
-    store.setState(reducer(store.state, action))
+    setState(reducer(state, action))
   },
   subscribe(fn) {
-    store.listeners.push(fn)
+    listeners.push(fn)
     return () => {
-      const index = store.listeners.indexOf(fn)
-      store.listeners.splice(index, 1)
+      const index = listeners.indexOf(fn)
+      listeners.splice(index, 1)
     }
   },
 }
 
-export const Provider = ({ children, store }) => {
-  return <Context.Provider value={store}>{children}</Context.Provider>
+export const createStore = (_reducer, initState) => {
+  reducer = _reducer
+  state = initState
+
+  return store
 }
 
-const reducer = (state, { type, payload }) => {
-  if (type === 'updateSection2') {
-    return { ...state, ...payload }
-  } else {
-    return state
-  }
+export const Provider = ({ children, store }) => {
+  return <Context.Provider value={store}>{children}</Context.Provider>
 }
 
 export const connect = Component => {
@@ -39,10 +41,8 @@ export const connect = Component => {
       store.subscribe(() => {
         update({})
       })
-    }, [store.state])
+    }, [state])
 
-    return (
-      <Component dispatch={store.dispatch} state={store.state} {...props} />
-    )
+    return <Component dispatch={store.dispatch} state={state} {...props} />
   }
 }

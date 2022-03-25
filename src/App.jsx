@@ -1,4 +1,14 @@
-import { connect, Provider, store } from './redux'
+import { connect, createStore, Provider } from './redux'
+
+const reducer = (state, { type, payload }) => {
+  if (type === 'updateSection2') {
+    return { ...state, ...payload }
+  } else {
+    return state
+  }
+}
+
+const store = createStore(reducer, { val: '' })
 
 export default function App() {
   return (

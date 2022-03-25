@@ -23,6 +23,15 @@ export const store = {
   },
 }
 
+let prevDispatch = store.dispatch
+store.dispatch = action => {
+  if (action instanceof Function) {
+    action(store.dispatch)
+  } else {
+    prevDispatch(action)
+  }
+}
+
 export const createStore = (_reducer, initState) => {
   reducer = _reducer
   state = initState
@@ -41,7 +50,7 @@ export const connect = (selector, dispatcherSelector) => Component => {
     const dispatchers = dispatcherSelector
       ? dispatcherSelector(store.dispatch)
       : { dispatch: store.dispatch }
-    
+
     useEffect(() => {
       store.subscribe(() => {
         update({})

@@ -19,6 +19,16 @@ export default function App() {
   )
 }
 
+const asyncFunc = () =>
+  new Promise(resolve => {
+    resolve(1)
+  })
+
+const getSyncData = async dispatch => {
+  const newData = await asyncFunc()
+  dispatch({ type: 'updateSection2', payload: { val: newData } })
+}
+
 const Section1 = connect(null, dispatch => ({
   updateSection2: payload => dispatch({ type: 'updateSection2', payload }),
 }))(({ updateSection2 }) => {
@@ -35,10 +45,17 @@ const Section1 = connect(null, dispatch => ({
   )
 })
 
-const Section2 = connect(state => state)(({ val }) => {
+const Section2 = connect(state => state)(({ val, dispatch }) => {
   return (
     <section>
       <div>section2: {val}</div>
+      <button
+        onClick={() => {
+          dispatch(getSyncData)
+        }}
+      >
+        async
+      </button>
     </section>
   )
 })

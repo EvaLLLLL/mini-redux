@@ -1,0 +1,5 @@
+**/*.svg
+**/*.html
+node_modules
+.idea
+.vscode

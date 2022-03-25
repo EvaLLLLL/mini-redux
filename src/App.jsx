@@ -12,6 +12,14 @@ export default function App() {
   )
 }
 
+const reducer = (state, { type, payload }) => {
+  if (type === 'updateSection2') {
+    return { ...state, ...payload }
+  } else {
+    return state
+  }
+}
+
 const Section1 = () => {
   const { appState, setAppState } = useContext(Context)
 
@@ -21,7 +29,16 @@ const Section1 = () => {
       <div>
         <input
           placeholder="update section2"
-          onChange={e => setAppState({ ...appState, val: e.target.value })}
+          onChange={e =>
+            setAppState(
+              reducer(appState, {
+                type: 'updateSection2',
+                payload: {
+                  val: e.target.value,
+                },
+              }),
+            )
+          }
         />
       </div>
     </section>

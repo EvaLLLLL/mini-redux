@@ -6,7 +6,7 @@ export default function App() {
   const [appState, setAppState] = useState({ val: '' })
   return (
     <Context.Provider value={{ appState, setAppState }}>
-      <Section1 />
+      <Wrapper />
       <Section2 />
     </Context.Provider>
   )
@@ -20,9 +20,17 @@ const reducer = (state, { type, payload }) => {
   }
 }
 
-const Section1 = () => {
+const Wrapper = () => {
   const { appState, setAppState } = useContext(Context)
 
+  const dispatch = action => {
+    setAppState(reducer(appState, action))
+  }
+
+  return <Section1 dispatch={dispatch} />
+}
+
+const Section1 = ({ dispatch }) => {
   return (
     <section>
       <div>section1</div>
@@ -30,14 +38,12 @@ const Section1 = () => {
         <input
           placeholder="update section2"
           onChange={e =>
-            setAppState(
-              reducer(appState, {
-                type: 'updateSection2',
-                payload: {
-                  val: e.target.value,
-                },
-              }),
-            )
+            dispatch({
+              type: 'updateSection2',
+              payload: {
+                val: e.target.value,
+              },
+            })
           }
         />
       </div>

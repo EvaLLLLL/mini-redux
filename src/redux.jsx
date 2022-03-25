@@ -34,15 +34,16 @@ export const Provider = ({ children, store }) => {
   return <Context.Provider value={store}>{children}</Context.Provider>
 }
 
-export const connect = Component => {
+export const connect = selector => Component => {
   return props => {
     const [, update] = useState({})
+    const newData = selector ? selector(state) : state
     useEffect(() => {
       store.subscribe(() => {
         update({})
       })
     }, [state])
 
-    return <Component dispatch={store.dispatch} state={state} {...props} />
+    return <Component dispatch={store.dispatch} {...newData} {...props} />
   }
 }

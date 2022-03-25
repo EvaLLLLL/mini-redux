@@ -19,7 +19,7 @@ export default function App() {
   )
 }
 
-const Section1 = connect(({ dispatch }) => {
+const Section1 = connect(null)(({ dispatch }) => {
   return (
     <section>
       <div>section1</div>
@@ -40,10 +40,10 @@ const Section1 = connect(({ dispatch }) => {
   )
 })
 
-const Section2 = connect(({ state }) => {
+const Section2 = connect(state => state)(({ val }) => {
   return (
     <section>
-      <div>section2: {state.val}</div>
+      <div>section2: {val}</div>
     </section>
   )
 })

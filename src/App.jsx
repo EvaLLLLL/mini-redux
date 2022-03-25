@@ -19,21 +19,16 @@ export default function App() {
   )
 }
 
-const Section1 = connect(null)(({ dispatch }) => {
+const Section1 = connect(null, dispatch => ({
+  updateSection2: payload => dispatch({ type: 'updateSection2', payload }),
+}))(({ updateSection2 }) => {
   return (
     <section>
       <div>section1</div>
       <div>
         <input
           placeholder="update section2"
-          onChange={e =>
-            dispatch({
-              type: 'updateSection2',
-              payload: {
-                val: e.target.value,
-              },
-            })
-          }
+          onChange={e => updateSection2({ val: e.target.value })}
         />
       </div>
     </section>

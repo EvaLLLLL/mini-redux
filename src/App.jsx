@@ -1,13 +1,11 @@
-import { useState } from 'react'
-import { connect, Context } from './redux'
+import { connect, Provider, store } from './redux'
 
 export default function App() {
-  const [appState, setAppState] = useState({ val: '' })
   return (
-    <Context.Provider value={{ appState, setAppState }}>
+    <Provider store={store}>
       <Section1 />
       <Section2 />
-    </Context.Provider>
+    </Provider>
   )
 }
 

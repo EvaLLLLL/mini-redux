@@ -27,6 +27,13 @@ let prevDispatch = store.dispatch
 store.dispatch = action => {
   if (action instanceof Function) {
     action(store.dispatch)
+  } else if (action.payload instanceof Promise) {
+    action.payload.then(data => {
+      store.dispatch({
+        ...action,
+        payload: data,
+      })
+    })
   } else {
     prevDispatch(action)
   }

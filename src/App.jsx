@@ -52,6 +52,11 @@ const Section2 = connect(state => state)(({ val, dispatch }) => {
       <button
         onClick={() => {
           dispatch(getSyncData)
+          
+          dispatch({
+            type: 'updateUser',
+            payload: asyncFunc().then(res => res)
+          })
         }}
       >
         async
